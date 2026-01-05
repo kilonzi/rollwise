@@ -172,6 +172,7 @@
 
 <script>
 import { useEarningsStore } from '@/stores/earningsStore'
+import { onMounted, onUnmounted } from 'vue'
 
 export default {
   name: 'TechWalletView',
@@ -192,13 +193,11 @@ export default {
     const earningsStore = useEarningsStore()
     
     // Initialize real-time listener on mount
-    import('vue').then(({ onMounted, onUnmounted }) => {
-        onMounted(() => {
-            earningsStore.init()
-        })
-        onUnmounted(() => {
-            earningsStore.cleanup()
-        })
+    onMounted(() => {
+        earningsStore.init()
+    })
+    onUnmounted(() => {
+        earningsStore.cleanup()
     })
 
     return { earningsStore }

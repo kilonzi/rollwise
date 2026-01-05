@@ -14,6 +14,7 @@ import JobAccessView from "@/views/client/JobAccessView.vue";
 import TermsOfService from "@/views/legal/TermsOfService.vue";
 import LiabilityWaiver from "@/views/legal/LiabilityWaiver.vue";
 import NonSolicitation from "@/views/legal/NonSolicitation.vue";
+import ProRegister from '../views/pro/ProRegister.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,7 +67,7 @@ const router = createRouter({
     {
       path: '/pro/apply',
       name: 'pro-apply',
-      component: () => import('../views/pro/ProRegister.vue')
+      component: ProRegister
     },
     {
       path: '/partner/apply', // Alias for join

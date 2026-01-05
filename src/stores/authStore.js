@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { userRepository } from '@/firebase/userRepository.js'
+import { db } from '@/firebase/database.js'
 
 const ROLE_HOME_ROUTES = {
   client: '/client-portal',
@@ -74,7 +75,6 @@ export const useAuthStore = defineStore('auth', {
       const normalized = data.phone.replace(/\D/g, '')
       if (normalized.length >= 10) {
         try {
-          const { db } = await import('@/firebase/database.js')
           await db.setRecord(`pro_leads/${normalized}`, {
             ...data,
             submittedAt: Date.now()
@@ -250,9 +250,6 @@ export const useAuthStore = defineStore('auth', {
     async fetchProLead(phone) {
       if (!phone) return null
       try {
-        const { db } = await import('@/firebase/database.js')
-        const { userRepository } = await import('@/firebase/userRepository.js')
-
         const normalized = phone.replace(/\D/g, '')
 
         // 1. Check for Lead Data (for pre-fill)
