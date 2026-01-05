@@ -1,0 +1,111 @@
+{
+  "rules": {
+    "development": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "users": {
+        "$userId": {
+          ".read": "auth != null",
+          ".write": "auth.uid === $userId || root.child('users/' + auth.uid + '/role').val() === 'admin'"
+        }
+      },
+      "jobs": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": ["status", "clientId", "technicianId", "createdAt"]
+      },
+      "technicians": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": ["available", "rating", "createdAt"]
+      },
+      "earnings": {
+        "$earningId": {
+          ".read": "auth != null && (data.child('userId').val() === auth.uid || root.child('users/' + auth.uid + '/role').val() === 'admin')",
+          ".write": "auth != null && root.child('users/' + auth.uid + '/role').val() === 'admin'"
+        },
+        ".indexOn": ["userId", "status", "createdAt"]
+      },
+      "dispatches": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": ["status", "createdAt"]
+      }
+    },
+    "sandbox": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "users": {
+        "$userId": {
+          ".read": "auth != null",
+          ".write": "auth.uid === $userId || root.child('sandbox/users/' + auth.uid + '/role').val() === 'admin'"
+        }
+      },
+      "jobs": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": ["status", "clientId", "technicianId", "createdAt"]
+      },
+      "technicians": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": ["available", "rating", "createdAt"]
+      },
+      "earnings": {
+        "$earningId": {
+          ".read": "auth != null && (data.child('userId').val() === auth.uid || root.child('sandbox/users/' + auth.uid + '/role').val() === 'admin')",
+          ".write": "auth != null && root.child('sandbox/users/' + auth.uid + '/role').val() === 'admin'"
+        },
+        ".indexOn": ["userId", "status", "createdAt"]
+      },
+      "dispatches": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": ["status", "createdAt"]
+      }
+    },
+    "production": {
+      ".read": false,
+      ".write": false,
+      "users": {
+        "$userId": {
+          ".read": "auth != null && auth.uid === $userId",
+          ".write": "auth != null && (auth.uid === $userId || root.child('production/users/' + auth.uid + '/role').val() === 'admin')",
+          ".validate": "newData.hasChildren(['name', 'email', 'role']) && newData.child('role').isString()"
+        }
+      },
+      "jobs": {
+        "$jobId": {
+          ".read": "auth != null && (data.child('clientId').val() === auth.uid || data.child('technicianId').val() === auth.uid || root.child('production/users/' + auth.uid + '/role').val() === 'admin')",
+          ".write": "auth != null && (data.child('clientId').val() === auth.uid || data.child('technicianId').val() === auth.uid || root.child('production/users/' + auth.uid + '/role').val() === 'admin')",
+          ".validate": "newData.hasChildren(['clientId', 'status', 'description']) && newData.child('status').isString()"
+        },
+        ".indexOn": ["status", "clientId", "technicianId", "createdAt"]
+      },
+      "technicians": {
+        "$techId": {
+          ".read": "auth != null",
+          ".write": "auth != null && (auth.uid === $techId || root.child('production/users/' + auth.uid + '/role').val() === 'admin')",
+          ".validate": "newData.hasChildren(['available', 'rating'])"
+        },
+        ".indexOn": ["available", "rating", "createdAt"]
+      },
+      "earnings": {
+        "$earningId": {
+          ".read": "auth != null && (data.child('userId').val() === auth.uid || root.child('production/users/' + auth.uid + '/role').val() === 'admin')",
+          ".write": "auth != null && root.child('production/users/' + auth.uid + '/role').val() === 'admin'",
+          ".validate": "newData.hasChildren(['userId', 'amount', 'status'])"
+        },
+        ".indexOn": ["userId", "status", "createdAt"]
+      },
+      "dispatches": {
+        "$dispatchId": {
+          ".read": "auth != null && root.child('production/users/' + auth.uid + '/role').val() === 'admin'",
+          ".write": "auth != null && root.child('production/users/' + auth.uid + '/role').val() === 'admin'"
+        },
+        ".indexOn": ["status", "createdAt"]
+      }
+    }
+  }
+}
+

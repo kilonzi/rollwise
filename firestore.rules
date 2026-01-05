@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // User Profiles
+    // Doc ID is digits only (e.g. 17742925110)
+    // Auth token phone is E.164 (e.g. +17742925110)
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && 
+        (request.auth.token.phone_number == '+' + userId || request.auth.uid == userId);
+    }
+    
+    // Jobs (Intake)
+    match /jobs/{jobId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

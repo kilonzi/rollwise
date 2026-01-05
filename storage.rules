@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Intake photos - allow public upload for new jobs
+    match /jobs/{jobId}/intake/{allPaths=**} {
+       allow read, write: if true;
+    }
+
+    // Pro Documents - temporarily Allow All to debug 403
+    match /pro_docs/{userId}/{allPaths=**} {
+      allow read, write: if true;
+    }
+
+    // Default deny
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

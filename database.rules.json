@@ -1,0 +1,32 @@
+{
+  "rules": {
+    "$env": {
+      "users": {
+        "$userId": {
+          ".read": "auth != null && (auth.token.phone_number === '+' + $userId || auth.uid === $userId)",
+          ".write": "auth != null && (auth.token.phone_number === '+' + $userId || auth.uid === $userId)"
+        }
+      },
+      "jobs": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": [
+          "clientPhoneNormalized"
+        ]
+      },
+      "pro_leads": {
+        ".read": false,
+        ".write": true,
+        "$phone": {
+          ".read": true
+        }
+      },
+      "messages": {
+        "$userId": {
+          ".read": "auth != null && (auth.token.phone_number === $userId || auth.uid === $userId)",
+          ".write": "auth != null && (auth.token.phone_number === $userId || auth.uid === $userId)"
+        }
+      }
+    }
+  }
+}

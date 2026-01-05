@@ -1,0 +1,60 @@
+<template>
+  <div class="skeleton" :style="styles"></div>
+</template>
+
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps({
+  width: {
+    type: String,
+    default: '100%'
+  },
+  height: {
+    type: String,
+    default: '1em'
+  },
+  borderRadius: {
+    type: String,
+    default: '4px'
+  }
+})
+
+const styles = computed(() => ({
+  width: props.width,
+  height: props.height,
+  borderRadius: props.borderRadius
+}))
+</script>
+
+<style scoped>
+.skeleton {
+  background-color: #e2e8f0;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.7) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+</style>
